@@ -1,0 +1,75 @@
+trigger:
+  branches:
+    include:
+      - main  # Adjust this to match your target branch
+
+pool:
+  name: 'self-host'  # Ensure self-hosted agent is running
+
+variables:
+- group: MendixBuildConfig  # References the variable group from Azure DevOps
+- group: KubeConfigGroup
+- group: MinioConfigGroup
+
+steps:
+  # ✅ Step 1: Checkout the code from Azure Repo
+  - checkout: self  # This ensures the code from the repository is downloaded
+
+  # ✅ Step 2: Build the Mendix Project
+  - script: |
+      echo "Starting Mendix Build..."
+
+      REM Ensure build directory exists
+      if not exist "C:\Builds" mkdir "C:\Builds"
+
+      REM Find Mendix Project File (Automatically)
+      for /r "$(BUILD_DIR)" %%F in (*.mpr) do set "PROJECT_PATH=%%F"
+
+      echo "Detected Project File: %PROJECT_PATH%"
+
+      REM Run Mendix Build
+      mxbuild ^
+      --target=package ^
+      --java-home "$(JAVA_HOME)" ^
+      --java-exe-path "$(JAVA_EXE_PATH)" ^
+      --output "$(OUTPUT_PATH)" ^
+      "%PROJECT_PATH%"
+    displayName: 'Build Mendix App using mxbuild'
+
+  # ✅ Step 3: Upload MDA File to MinIO and get Public URL
+    # - powershell: |
+    #     Write-Output "Uploading .mda file to MinIO..."
+        
+    #     # Set up MinIO alias
+    #     & mc alias set myminio $env:MINIO_ENDPOINT $env:MINIO_ACCESS_KEY $env:MINIO_SECRET_KEY
+        
+    #     # Copy file to minio
+    #     & mc cp $env:TEST_OUTPUT_PATH "myminio/$env:MINIO_BUCKET_NAME/"
+
+    #     # Get the public URL (ensure the previous command succeeded before running this)
+    #     $PUBLIC_URL = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String "http"
+    #     #$PUBLIC_URL = $PUBLIC_URL -replace ".*(http[^\s]+).*", '$1'
+
+    #     Write-Output "File uploaded. Public URL: $PUBLIC_URL"
+    #     #Write-Output "##vso[task.setvariable variable=MDA_PUBLIC_URL]$PUBLIC_URL"
+    #   displayName: 'Upload MDA to MinIO and Get Public URL'
+
+ # ✅ Step 4: Decode the Kubeconfig File
+  # - powershell: |
+  #     Write-Host "Decoding and setting up kubeconfig..."
+  #     [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("$(KUBE_CONFIG_SECRET)")) | Set-Content C:\Users\Public\kubeconfig
+  #     $env:KUBE_CONFIG="C:\Users\Public\kubeconfig"
+  #     Write-Host "Kubeconfig set at C:\Users\Public\kubeconfig"
+  #   displayName: 'Set Kubeconfig with PowerShell'
+
+  # ✅ Step 5: Apply Custom Resource (CR) to Kubernetes Cluster
+  # - script: |
+  #     echo "Applying Custom Resource (CR) to Kubernetes..."
+  #     kubectl apply -f k8s/mendix-cr.yaml --kubeconfig=C:\Users\Public\kubeconfig
+  #   displayName: 'Apply CR to Kubernetes Cluster'
+
+  # ✅ Step 5: Apply Custom Resource (CR) to Kubernetes Cluster
+  # - script: |
+  #     echo "Applying Custom Resource (CR) to Kubernetes..."
+  #     kubectl apply -f k8s/mendix-cr.yaml 
+  #   displayName: 'Apply CR to Kubernetes Cluster'
