@@ -4,11 +4,10 @@ trigger:
       - main  # Adjust this to match your target branch
 
 pool:
-  name: 'self-host'  # Ensure self-hosted agent is running
+  name: 'mdx-agent'  # Ensure self-hosted agent is running
 
 variables:
 - group: MendixBuildConfig  # References the variable group from Azure DevOps
-- group: KubeConfigGroup
 - group: MinioConfigGroup
 
 steps:
