@@ -47,7 +47,7 @@ steps:
       & mc cp $env:TEST_OUTPUT_PATH "myminio/$env:MINIO_BUCKET_NAME/"
 
       # Get the public URL (ensure the previous command succeeded before running this)
-      $PUBLIC_URL = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String "http"
+      $PUBLIC_URL = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" 
       #$PUBLIC_URL = $PUBLIC_URL -replace ".*(http[^\s]+).*", '$1'
 
       Write-Output "File uploaded. Public URL: $PUBLIC_URL"
