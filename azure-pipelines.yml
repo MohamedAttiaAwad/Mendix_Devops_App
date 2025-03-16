@@ -35,23 +35,25 @@ steps:
       "%PROJECT_PATH%"
     displayName: 'Build Mendix App using mxbuild'
 
+
   # ✅ Step 3: Upload MDA File to MinIO and get Public URL
-    # - powershell: |
-    #     Write-Output "Uploading .mda file to MinIO..."
-        
-    #     # Set up MinIO alias
-    #     & mc alias set myminio $env:MINIO_ENDPOINT $env:MINIO_ACCESS_KEY $env:MINIO_SECRET_KEY
-        
-    #     # Copy file to minio
-    #     & mc cp $env:TEST_OUTPUT_PATH "myminio/$env:MINIO_BUCKET_NAME/"
+  - powershell: |
+      Write-Output "Uploading .mda file to MinIO..."
+      
+      # Set up MinIO alias
+      #& mc alias set myminio $env:MINIO_ENDPOINT $env:MINIO_ACCESS_KEY $env:MINIO_SECRET_KEY
+      
+      # Copy file to minio
+      & mc cp $env:TEST_OUTPUT_PATH "myminio/$env:MINIO_BUCKET_NAME/"
 
-    #     # Get the public URL (ensure the previous command succeeded before running this)
-    #     $PUBLIC_URL = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String "http"
-    #     #$PUBLIC_URL = $PUBLIC_URL -replace ".*(http[^\s]+).*", '$1'
+      # Get the public URL (ensure the previous command succeeded before running this)
+      $PUBLIC_URL = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String "http"
+      #$PUBLIC_URL = $PUBLIC_URL -replace ".*(http[^\s]+).*", '$1'
 
-    #     Write-Output "File uploaded. Public URL: $PUBLIC_URL"
-    #     #Write-Output "##vso[task.setvariable variable=MDA_PUBLIC_URL]$PUBLIC_URL"
-    #   displayName: 'Upload MDA to MinIO and Get Public URL'
+      Write-Output "File uploaded. Public URL: $PUBLIC_URL"
+      #Write-Output "##vso[task.setvariable variable=MDA_PUBLIC_URL]$PUBLIC_URL"
+    displayName: 'Upload MDA to MinIO and Get Public URL'
+    
 
  # ✅ Step 4: Decode the Kubeconfig File
   # - powershell: |
