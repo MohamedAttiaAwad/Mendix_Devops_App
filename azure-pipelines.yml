@@ -50,7 +50,7 @@ steps:
       $PUBLIC_URLS = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String "http"
       if ($PUBLIC_URLS.Count -ge 2) {
           $env:PUBLIC_URL = $PUBLIC_URLS[1] -replace ".*(http[^\s]+).*", '$1'
-          Write-Output "File uploaded. Second Public URL: $PUBLIC_URL"
+          Write-Output "File uploaded. Second Public URL: $env.PUBLIC_URL"
       }
       else{
           Write-Output "File not found".
