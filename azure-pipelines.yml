@@ -44,7 +44,7 @@ steps:
       #& mc alias set myminio $env:MINIO_ENDPOINT $env:MINIO_ACCESS_KEY $env:MINIO_SECRET_KEY
       
       # Upload the file to MinIO
-      & mc cp $env:TEST_OUTPUT_PATH "myminio/$env:MINIO_BUCKET_NAME/"
+      & mc cp $env:OUTPUT_PATH "myminio/$env:MINIO_BUCKET_NAME/"
 
       # Get the public URL (ensure the previous command succeeded before running this)
       $PUBLIC_URLS = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String -Pattern "http[s]?://[^\s]+" -AllMatches
