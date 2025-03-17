@@ -40,14 +40,14 @@ steps:
   - powershell: |
       Write-Output "Uploading .mda file to MinIO..."
       
-      # Set up MinIO alias
+      # Set up MinIO alias - for first time
       #& mc alias set myminio $env:MINIO_ENDPOINT $env:MINIO_ACCESS_KEY $env:MINIO_SECRET_KEY
       
-      # Copy file to minio
+      # Upload the file to MinIO
       & mc cp $env:TEST_OUTPUT_PATH "myminio/$env:MINIO_BUCKET_NAME/"
 
       # Get the public URL (ensure the previous command succeeded before running this)
-      $PUBLIC_URL = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String "http"
+      $PUBLIC_URL = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String "http" | Select-Object -First 1
       $PUBLIC_URL = $PUBLIC_URL -replace ".*(http[^\s]+).*", '$1'
 
       Write-Output "File uploaded. Public URL: $PUBLIC_URL"
