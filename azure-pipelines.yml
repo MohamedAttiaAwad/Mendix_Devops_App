@@ -49,16 +49,26 @@ steps:
       # Get the public URL (ensure the previous command succeeded before running this)
       $PUBLIC_URLS = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String -Pattern "http[s]?://[^\s]+" -AllMatches
       if ($PUBLIC_URLS.Matches.Count -ge 1) {
-          $env:PUBLIC_URL = $PUBLIC_URLS.Matches[1].Value
-          Write-Output "File uploaded. Public URL: $env:PUBLIC_URL"
+          $PUBLIC_URL = $PUBLIC_URLS.Matches[1].Value
+          # Save the URL to a file or CI/CD variable for the next step
+          echo "##vso[task.setvariable variable=PUBLIC_URL]$PUBLIC_URL"
+          Write-Output "Public URL: $PUBLIC_URL"
       } else {
-          Write-Output "File not found or sharing failed."
+          Write-Error "Failed to get public URL"
+          exit 1
       }
     displayName: 'Upload MDA to MinIO and Get Public URL'
     
 
   # ✅ Step 5: Apply Custom Resource (CR) to Kubernetes Cluster
   - powershell: |
-      Write-Host "Applying Custom Resource (CR) to Kubernetes..."
-      kubectl apply -f k8s/mendix-app-cr.yaml 
+      # Replace placeholder in YAML with PUBLIC_URL
+      $crContent = Get-Content -Path "k8s/mendix-app-cr.yaml" -Raw
+      $crContent = $crContent -replace "{{PUBLIC_URL}}", "$env:PUBLIC_URL"
+      $crContent | Set-Content -Path "k8s/mendix-app-cr-processed.yaml"
+
+      # Apply the processed YAML
+      kubectl apply -f k8s/mendix-app-cr-processed.yaml
     displayName: 'Apply CR to Kubernetes Cluster'
+    env:
+      PUBLIC_URL: $(PUBLIC_URL) # Ensure variable is passed to this step
