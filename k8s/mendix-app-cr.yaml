@@ -9,7 +9,7 @@ spec:
   storage: # Specification of Storage CR
     servicePlan: stg1 #dev
   mendixRuntimeVersion: 10.18.0 # Studio Pro version of the Mendix app
-  sourceURL: https://s3.envnt.tech:9001/api/v1/download-shared-object/aHR0cHM6Ly8xMjcuMC4wLjE6OTAwMC9tYXR0aWEtbWVuZGl4LXN0b3JhZ2UvbWR4LXByaXZhdGUtY2xvdWRfMjAyNTAzMTBfMDUyMS5tZGE_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1JUjFMRlhIRUVKN0dLUUJKODVLWCUyRjIwMjUwMzE3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDMxN1QwNzQ3MzVaJlgtQW16LUV4cGlyZXM9NDMxOTgmWC1BbXotU2VjdXJpdHktVG9rZW49ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmhZMk5sYzNOTFpYa2lPaUpKVWpGTVJsaElSVVZLTjBkTFVVSktPRFZMV0NJc0ltVjRjQ0k2TVRjME1qSXpPVGM1TVN3aWNHRnlaVzUwSWpvaWJXRjBkR2xoSW4wLkUyNWxVTjV3ZlVIZzAxTDIxc3YzZ1B5SmZkVk1fSTdCRTQ3SnAxaEZYcG8wemxKTHN4Rm12NkpIb3F4TmZ3Q3hhQ0tfMDJFRUIyVGJSNU9jMmFZS1R3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZ2ZXJzaW9uSWQ9bnVsbCZYLUFtei1TaWduYXR1cmU9M2Y2N2VmZGU2MzZmMWFjZGM3YmJhZDc3OTdiM2QxNTg4MjJmYmYxZDZlMDZjYzdmMjVkM2YxYmFiZThlNTFmYg # https://example.com/example-app.mda # URL of App's source MDA or prebuilt OCI image
+  sourceURL: ${PUBLIC_URL} # https://example.com/example-app.mda # URL of App's source MDA or prebuilt OCI image
   appURL: myapp.mendix.envnt.tech # URL to access the app
   replicas: 1 # Number of replicas, set to 0 to stop all replicas
 
