@@ -49,7 +49,7 @@ steps:
       # Get the public URL (ensure the previous command succeeded before running this)
       $PUBLIC_URLS = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String -Pattern "http[s]?://[^\s]+" -AllMatches
       if ($PUBLIC_URLS.Matches.Count -ge 1) {
-          $env:PUBLIC_URL = $PUBLIC_URLS.Matches[0].Value
+          $env:PUBLIC_URL = $PUBLIC_URLS.Matches[1].Value
           Write-Output "File uploaded. Public URL: $env:PUBLIC_URL"
       } else {
           Write-Output "File not found or sharing failed."
