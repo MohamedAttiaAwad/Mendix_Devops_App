@@ -49,8 +49,11 @@ steps:
       # Get the public URL (ensure the previous command succeeded before running this)
       $PUBLIC_URLS = & mc share download "myminio/$env:MINIO_BUCKET_NAME/$env:FILE_NAME" | Select-String "http"
       if ($PUBLIC_URLS.Count -ge 2) {
-          $PUBLIC_URL = $PUBLIC_URLS[1] -replace ".*(http[^\s]+).*", '$1'
+          $env:PUBLIC_URL = $PUBLIC_URLS[1] -replace ".*(http[^\s]+).*", '$1'
           Write-Output "File uploaded. Second Public URL: $PUBLIC_URL"
+      }
+      else{
+          Write-Output "File not found".
       }
     displayName: 'Upload MDA to MinIO and Get Public URL'
     
