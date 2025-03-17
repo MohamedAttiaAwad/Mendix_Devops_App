@@ -55,22 +55,8 @@ steps:
     displayName: 'Upload MDA to MinIO and Get Public URL'
     
 
- # ✅ Step 4: Decode the Kubeconfig File
-  # - powershell: |
-  #     Write-Host "Decoding and setting up kubeconfig..."
-  #     [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("$(KUBE_CONFIG_SECRET)")) | Set-Content C:\Users\Public\kubeconfig
-  #     $env:KUBE_CONFIG="C:\Users\Public\kubeconfig"
-  #     Write-Host "Kubeconfig set at C:\Users\Public\kubeconfig"
-  #   displayName: 'Set Kubeconfig with PowerShell'
-
   # ✅ Step 5: Apply Custom Resource (CR) to Kubernetes Cluster
-  # - script: |
-  #     echo "Applying Custom Resource (CR) to Kubernetes..."
-  #     kubectl apply -f k8s/mendix-cr.yaml --kubeconfig=C:\Users\Public\kubeconfig
-  #   displayName: 'Apply CR to Kubernetes Cluster'
-
-  # ✅ Step 5: Apply Custom Resource (CR) to Kubernetes Cluster
-  # - script: |
-  #     echo "Applying Custom Resource (CR) to Kubernetes..."
-  #     kubectl apply -f k8s/mendix-cr.yaml 
-  #   displayName: 'Apply CR to Kubernetes Cluster'
+  - powershell: |
+      Write-Host "Applying Custom Resource (CR) to Kubernetes..."
+      kubectl apply -f k8s/mendix-app-cr.yaml 
+    displayName: 'Apply CR to Kubernetes Cluster'
